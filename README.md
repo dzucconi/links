@@ -1,5 +1,7 @@
 # links
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/36d527fe-9824-4573-9b5f-17c849fa4c38/deploy-status)](https://app.netlify.com/sites/damonzucconi-links/deploys)
+
 ## Meta
 
 - **State**: production
