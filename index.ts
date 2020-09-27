@@ -32,7 +32,7 @@ const tag = (html: string) =>
 const ENDPOINT =
   "https://atlas.auspic.es/graph/6912ccab-cdeb-4d70-b675-b6aafae56746";
 
-const STATE = { page: 1 };
+const STATE = { page: 0 };
 
 const DOM = {
   root: document.getElementById("root"),
@@ -42,7 +42,8 @@ const DOM = {
 
 const observer = new IntersectionObserver((entries) => {
   if (entries.some((entry) => entry.intersectionRatio > 0)) {
-    request(STATE.page++);
+    STATE.page++;
+    request(STATE.page);
   }
 });
 
@@ -61,26 +62,25 @@ const render = ({ collection: { links } }: Data) => {
   );
 };
 
-const request = (page: number = STATE.page) =>
-  fetch(ENDPOINT, {
+const request = async (page: number) => {
+  const res = await fetch(ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: query(page) }),
-  })
-    .then((res) => res.json())
-    .then(({ data }: { data: Data }) => {
-      if (data.collection.links.length === 0) {
-        observer.disconnect();
-        DOM.root.removeChild(DOM.sentinel);
-        return;
-      }
-
-      DOM.links.appendChild(render(data));
-    });
+  });
+  const { data } = await res.json();
+  if (data.collection.links.length === 0) {
+    observer.disconnect();
+    DOM.root.removeChild(DOM.sentinel);
+    return;
+  }
+  DOM.links.appendChild(render(data));
+};
 
 const init = () => {
   if (document.body.clientHeight < document.documentElement.clientHeight) {
-    request().then(init);
+    STATE.page++;
+    request(STATE.page).then(init);
     return;
   }
 
