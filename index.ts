@@ -13,7 +13,7 @@ const query = (page: number) => `
   {
     collection: object {
       ... on Collection {
-        links: contents(page: ${page}, per: 50, sortBy: CREATED_AT_ASC) {
+        links: contents(page: ${page}, per: 50, sortBy: POSITION_ASC) {
           name: value
           link: entity {
             ... on Link {
