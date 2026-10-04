@@ -3,3 +3,6 @@ node_modules
 dist
 .cache
 yarn-error.log
+.netlify
+.env*
+!.env.example
